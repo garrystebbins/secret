@@ -46,8 +46,8 @@ br.set_cookiejar(cj)
 br.open("https://api.dmctools.com/admin/login/")
 
 br.select_form(nr=0)
-br.form['username'] = 'marketing@dmctools.com'
-br.form['password'] = 'dmcw3bsi+e'
+br.form['username'] = 'USERNAME'
+br.form['password'] = 'PASSWORD'
 br.submit()
 
 ### Sanitize Data First!!
@@ -57,7 +57,7 @@ br.submit()
 item_column = []
 price_column = []
 
-with open('/home/bens-dev-s/Downloads/2019_retail_pricing_online_items.csv') as csv_file:
+with open('/PATH/CSV.csv') as csv_file:
     rows = csv.reader(csv_file, delimiter=',')
     for row in rows:
         item_column.append(row[0].strip())
@@ -65,7 +65,7 @@ with open('/home/bens-dev-s/Downloads/2019_retail_pricing_online_items.csv') as 
 
 # Run a search for each item in column ######
 # Select form by ID, Input the search item & get results from search item
-page_content = br.open("https://api.dmctools.com/admin/catalogue/product/").read()
+page_content = br.open("SET_URL").read()
 br.select_form(nr=0)
 
 for item in item_column:
@@ -77,13 +77,13 @@ for item in item_column:
     ########## Select the last paginated page & open -- TO DO !!!!!!!! ############
     # https://api.dmctools.com/admin/catalogue/product/?p=2&q=AF8
 
-    soup = BeautifulSoup(br.open('https://api.dmctools.com/admin/catalogue/product/?p=2&q=AF8').read())
+    soup = BeautifulSoup(br.open('SET_URL').read())
 
     # Find correct link and follow url
     # product_link = soup.find_all('a', text='AF8')
     product_link = soup.find_all('a', text=item) # Replace with loop item
 
-    domain = "https://api.dmctools.com"
+    domain = "SET_DOMAIN"
 
     just_url = product_link[0].get('href')
 
@@ -94,13 +94,13 @@ for item in item_column:
     # open search item page and change input value
 
     def select_page_form(form):
-        return form.attrs.get('id', None) == 'product_form'
+        return form.attrs.get('id', None) == 'SET_ID'
 
     selected_form = br.select_form(predicate=select_page_form)
 
     # unit_price_value = br.form['unit_price'] = '1325.31'
     for price in price_column:
-        unit_price_value = br.form['unit_price'] = price
+        unit_price_value = br.form['SET_NAME'] = price
 
         br.submit(name='_save')
 
